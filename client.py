@@ -5,6 +5,8 @@ import tkinter as tk
 import shutdown_logout_client as sl
 import mac_address_client as mac
 import keylogger_client as kl
+import directory_tree_client as dt 
+from tkinter import messagebox
 
 #global variables
 BUFSIZ = 1024 * 4
@@ -17,6 +19,12 @@ f1 = ui1.Entrance_UI(root)
 
 def back(ui):
     ui.place_forget()
+    f2.place(x = 0, y = 0)
+    client.sendall(bytes("QUIT", "utf8"))
+
+def back_dirTree(ui):
+    ui.place_forget()
+    ui.tree.pack_forget()
     f2.place(x = 0, y = 0)
     client.sendall(bytes("QUIT", "utf8"))
 
@@ -49,6 +57,12 @@ def keylogger():
     client.sendall(bytes("KEYLOG", "utf8"))
     tmp = kl.Keylogger_UI(root, client)
     tmp.button_6.configure(command = lambda: back(tmp))
+    return
+
+def directory_tree():
+    client.sendall(bytes("DIRECTORY", "utf8"))
+    tmp = dt.DirectoryTree_UI(root, client)
+    tmp.button_6.configure(command = lambda: back_dirTree(tmp))
     return
 
 def show_main_ui():

