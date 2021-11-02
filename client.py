@@ -1,11 +1,18 @@
 import entrance_ui as ui1
 import main_ui as ui2
+<<<<<<< HEAD
 import socket
+=======
+import socket, pickle, json, struct
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
 import tkinter as tk
 import shutdown_logout_client as sl
 import mac_address_client as mac
 import keylogger_client as kl
+<<<<<<< HEAD
 import app_process_client as ap
+=======
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
 
 #global variables
 BUFSIZ = 1024 * 4
@@ -13,7 +20,10 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 root = tk.Tk()
 root.geometry("1000x600")
 root.configure(bg = "#FFFFFF")
+<<<<<<< HEAD
 root.title('Client')
+=======
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
 root.resizable(False, False)
 f1 = ui1.Entrance_UI(root)
 
@@ -26,7 +36,11 @@ def live_screen():
     return
 
 def shutdown_logout():
+<<<<<<< HEAD
     client.sendall(bytes("SD_LO", "utf8"))
+=======
+    client.sendall(bytes("SHUTDOWN", "utf8"))
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
     sl.shutdown_logout(client, root)
     return
 
@@ -39,9 +53,12 @@ def directory_tree():
     return
 
 def app_process():
+<<<<<<< HEAD
     client.sendall(bytes("APP_PRO", "utf8"))
     tmp = ap.App_Process_UI(root, client)
     tmp.button_6.configure(command = lambda: back(tmp))
+=======
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
     return
 
 def disconnect():
@@ -69,6 +86,10 @@ def show_main_ui():
     f2.button_7.configure(command = keylogger)
     return
     
+<<<<<<< HEAD
+=======
+
+>>>>>>> f545b813dac6a133a16b8232c4961e85e6242301
 def connect():
     global client
     ip = f1.input.get()
