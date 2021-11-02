@@ -23,7 +23,7 @@ def _print(client, textbox):
     client.sendall(bytes("PRINT", "utf8"))
     print("  ")
     data = client.recv(BUFSIZ).decode("utf8")
-    data = data.replace("'", "")
+    #data = data.replace("'", "")
     data = data[1:]
     textbox.config(state = "normal")
     textbox.insert(tk.END, data)

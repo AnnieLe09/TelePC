@@ -80,19 +80,23 @@ def send_start(client):
 def start(root, client):
     global pname
     pstart = tk.Toplevel(root)
+    pstart['bg'] = 'plum1'
     pstart.geometry("410x40")
     pname = tk.StringVar(pstart)
     tk.Entry(pstart, textvariable = pname, width = 38, borderwidth = 5).grid(row = 0, column = 0)
-    tk.Button(pstart, text = "Start", width = 14, height = 1, command = lambda: send_start(client)).grid(row = 0, column = 1)
+    tk.Button(pstart, text = "Start", width = 14, height = 1, fg = 'white', bg = 'IndianRed3', borderwidth=0,
+            highlightthickness=0, command = lambda: send_start(client), relief="flat").grid(row = 0, column = 1)
     return
     
 def kill(root, client):
     global pid
     kill = tk.Toplevel(root)
+    kill['bg'] = 'plum1'
     kill.geometry("410x40")
     pid = tk.StringVar(kill)
     tk.Entry(kill, textvariable = pid, width = 38, borderwidth = 5).grid(row = 0, column = 0)
-    tk.Button(kill, text = "Kill", width = 14, height = 1, command = lambda: send_kill(client)).grid(row = 0, column = 1)
+    tk.Button(kill, text = "Kill", width = 14, height = 1, fg = 'white', bg = 'IndianRed3', borderwidth=0,
+            highlightthickness=0, command = lambda: send_kill(client), relief="flat").grid(row = 0, column = 1)
     return
         
 class App_Process_UI(Canvas):
@@ -130,8 +134,8 @@ class App_Process_UI(Canvas):
         self.tab.column("ID", anchor="center", width = 150, minwidth = 10, stretch = True)
         self.tab.column("Count", anchor="center", width = 150, minwidth = 10, stretch = True)
         self.tab.heading('#0', text='')
-        self.tab.heading("Name", text = "Name Application")
-        self.tab.heading("ID", text = "ID Application")
+        self.tab.heading("Name", text = "Name")
+        self.tab.heading("ID", text = "ID")
         self.tab.heading("Count", text = "Count Threads")
         self.tab.place(x=53.0,
             y=162.0,

@@ -13,6 +13,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 root = tk.Tk()
 root.geometry("1000x600")
 root.configure(bg = "#FFFFFF")
+root.title('Client')
 root.resizable(False, False)
 f1 = ui1.Entrance_UI(root)
 
@@ -25,7 +26,7 @@ def live_screen():
     return
 
 def shutdown_logout():
-    client.sendall(bytes("SHUTDOWN", "utf8"))
+    client.sendall(bytes("SD_LO", "utf8"))
     sl.shutdown_logout(client, root)
     return
 
@@ -68,7 +69,6 @@ def show_main_ui():
     f2.button_7.configure(command = keylogger)
     return
     
-
 def connect():
     global client
     ip = f1.input.get()

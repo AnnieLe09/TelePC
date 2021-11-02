@@ -1,5 +1,5 @@
 import tkinter as tk
-import socket, PIL.ImageGrab, uuid
+import socket, uuid
 import os
 import keylogger_server as kl 
 import app_process_server as ap
@@ -7,14 +7,12 @@ import app_process_server as ap
 main = tk.Tk()
 main.geometry("200x200")
 main.title("Server")
+main['bg'] = 'plum1'
 
 #Global variables
-###############################################################################
 global client
 BUFSIZ = 1024 * 4
-WIDTH = 1900
-HEIGHT = 1000
-###############################################################################
+
 def keylogger():
     global client
     kl.keylog(client)
@@ -58,7 +56,7 @@ def Connect():
         msg = client.recv(BUFSIZ).decode("utf8")
         if "KEYLOG" in msg:
             keylogger()
-        elif "SHUTDOWN" in msg:
+        elif "SD_LO" in msg:
             shutdown_logout()
         elif "LIVESCREEN" in msg:
             live_screen()
@@ -74,8 +72,8 @@ def Connect():
             return
 ###############################################################################    
 
-tk.Button(main, text = "Open", command = Connect).place(x = 100, y = 100, anchor = "center")
-
+tk.Button(main, text = "OPEN", width = 10, height = 2, fg = 'white', bg = 'IndianRed3', borderwidth=0,
+            highlightthickness=0, command = Connect, relief="flat").place(x = 100, y = 100, anchor = "center")
 main.mainloop()
 
 

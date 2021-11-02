@@ -122,7 +122,10 @@ def app_process(client):
             ls1 = pickle.dumps(ls1)
             ls2 = pickle.dumps(ls2)
             ls3 = pickle.dumps(ls3)
+            print(" ")
             send_data(client, ls1)
+            print(" ")
             send_data(client, ls2)
+            print(" ")
             send_data(client, ls3)
     return
