@@ -6,6 +6,7 @@ import shutdown_logout_client as sl
 import mac_address_client as mac
 import keylogger_client as kl
 import directory_tree_client as dt 
+import app_process_client as ap
 from tkinter import messagebox
 
 #global variables
@@ -14,6 +15,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 root = tk.Tk()
 root.geometry("1000x600")
 root.configure(bg = "#FFFFFF")
+root.title('Client')
 root.resizable(False, False)
 f1 = ui1.Entrance_UI(root)
 
@@ -32,7 +34,7 @@ def live_screen():
     return
 
 def shutdown_logout():
-    client.sendall(bytes("SHUTDOWN", "utf8"))
+    client.sendall(bytes("SD_LO", "utf8"))
     sl.shutdown_logout(client, root)
     return
 
@@ -45,6 +47,9 @@ def directory_tree():
     return
 
 def app_process():
+    client.sendall(bytes("APP_PRO", "utf8"))
+    tmp = ap.App_Process_UI(root, client)
+    tmp.button_6.configure(command = lambda: back(tmp))
     return
 
 def disconnect():
@@ -78,7 +83,6 @@ def show_main_ui():
     f2.button_7.configure(command = keylogger)
     return
     
-
 def connect():
     global client
     ip = f1.input.get()

