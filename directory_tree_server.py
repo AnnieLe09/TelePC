@@ -72,3 +72,40 @@ def copyFileTo(sock):
     with open(filename, "rb") as f:
         data = f.read()
         sock.sendall(data)
+
+def directory(client):
+    isMod = False
+    
+    while True:
+        if not isMod:
+            mod = client.recv(BUFSIZ).decode()
+
+        if (mod == "SHOW"):
+            client.sendall("OK".encode())
+            while True:
+                check = sendListDirs(client)
+                if not check[0]:    
+                    mod = check[1]
+                    if (mod != "error"):
+                        isMod = True
+                        break
+        
+        # copy file from client to server
+        elif (mod == "COPYTO"):
+            client.sendall("OK".encode())
+            copyFile(client)
+            isMod = False
+
+        # copy file from server to client
+        elif (mod == "COPY"):
+            client.sendall("OK".encode())
+            copyFileTo(client)
+            isMod = False
+
+        elif (mod == "DEL"):
+            client.sendall("OK".encode())
+            delFile(client)
+            isMod = False
+
+        else:
+            return
