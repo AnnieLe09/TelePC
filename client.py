@@ -1,13 +1,11 @@
 import entrance_ui as ui1
 import main_ui as ui2
-import socket, pickle, json, struct
+import socket
 import tkinter as tk
 import shutdown_logout_client as sl
 import mac_address_client as mac
 import keylogger_client as kl
-import directory_tree_client as dt 
 import app_process_client as ap
-from tkinter import messagebox
 
 #global variables
 BUFSIZ = 1024 * 4
@@ -21,12 +19,6 @@ f1 = ui1.Entrance_UI(root)
 
 def back(ui):
     ui.place_forget()
-    f2.place(x = 0, y = 0)
-    client.sendall(bytes("QUIT", "utf8"))
-
-def back_dirTree(ui):
-    ui.place_forget()
-    ui.tree.pack_forget()
     f2.place(x = 0, y = 0)
     client.sendall(bytes("QUIT", "utf8"))
 
@@ -64,12 +56,6 @@ def keylogger():
     tmp.button_6.configure(command = lambda: back(tmp))
     return
 
-def directory_tree():
-    client.sendall(bytes("DIRECTORY", "utf8"))
-    tmp = dt.DirectoryTree_UI(root, client)
-    tmp.button_6.configure(command = lambda: back_dirTree(tmp))
-    return
-
 def show_main_ui():
     f1.place_forget()
     global f2
@@ -82,7 +68,7 @@ def show_main_ui():
     f2.button_6.configure(command = disconnect)
     f2.button_7.configure(command = keylogger)
     return
-    
+
 def connect():
     global client
     ip = f1.input.get()

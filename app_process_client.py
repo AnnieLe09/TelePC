@@ -26,11 +26,17 @@ def receive(client):
     data = recvall(client, size)
     return data
 
-def switch(btn):
+def switch(btn, tab):
     if btn['text'] == 'PROCESS':
         btn.configure(text = 'APPLICATION')
+        tab.heading("Name", text = "Name Process")
+        tab.heading("ID", text = "ID Process")
+        tab.heading("Count", text = "Count Threads")
     else:
         btn.configure(text = 'PROCESS')
+        tab.heading("Name", text = "Name Application")
+        tab.heading("ID", text = "ID Application")
+        tab.heading("Count", text = "Count Threads")
     return
 
 def send_kill(client):
@@ -134,8 +140,8 @@ class App_Process_UI(Canvas):
         self.tab.column("ID", anchor="center", width = 150, minwidth = 10, stretch = True)
         self.tab.column("Count", anchor="center", width = 150, minwidth = 10, stretch = True)
         self.tab.heading('#0', text='')
-        self.tab.heading("Name", text = "Name")
-        self.tab.heading("ID", text = "ID")
+        self.tab.heading("Name", text = "Name Application")
+        self.tab.heading("ID", text = "ID Application")
         self.tab.heading("Count", text = "Count Threads")
         self.tab.place(x=53.0,
             y=162.0,
@@ -146,7 +152,7 @@ class App_Process_UI(Canvas):
             #image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: switch(self.button_1),
+            command=lambda: switch(self.button_1, self.tab),
             relief="flat"
         )
         self.button_1.place(

