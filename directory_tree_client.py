@@ -97,7 +97,7 @@ class DirectoryTree_UI(Canvas):
         self.tree.bind("<<TreeviewSelect>>", self.select_node)
 
         self.insText2 = "Selected path.\n\
-            Click COPY TO PATH button to select a file you want to copy to this path.\n\
+            Click SEND FILE TO FOLDER button to select a file you want to copy to this folder.\n\
             Click COPY THIS FILE to copy the selected file to your computer (client)\n\
             Click DELETE button to delete the file on this path.\nYou can click SHOW button again to see the changes."
         self.label2 = tk.Label(self.frame, text=self.insText2)
@@ -117,11 +117,11 @@ class DirectoryTree_UI(Canvas):
             width=135.0,
             height=53.0
         )
-        self.button_3 = Button(self, text = 'COPY TO PATH', width = 20, height = 5, fg = 'white', bg = 'IndianRed3',
+        self.button_3 = Button(self, text = 'SEND FILE TO FOLDER', width = 20, height = 5, fg = 'white', bg = 'IndianRed3',
             #image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=self.copyFileTo,
+            command=self.copyFileToServer,
             relief="flat"
         )
         self.button_3.place(
@@ -134,7 +134,7 @@ class DirectoryTree_UI(Canvas):
             #image=button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=self.copyFile,
+            command=self.copyFileToClient,
             relief="flat"
         )
         self.button_4.place(
@@ -222,7 +222,7 @@ class DirectoryTree_UI(Canvas):
                     continue
 
     # copy file from client to server
-    def copyFileTo(self):
+    def copyFileToServer(self):
         self.client.sendall("COPYTO".encode())
         isOk = self.client.recv(BUFFER_SIZE).decode()
         if (isOk == "OK"):
@@ -243,7 +243,7 @@ class DirectoryTree_UI(Canvas):
         return False
 
     # copy file from server to client
-    def copyFile(self):
+    def copyFileToClient(self):
         self.client.sendall("COPY".encode())
         isOk = self.client.recv(BUFFER_SIZE).decode()
         if (isOk == "OK"):
@@ -256,7 +256,7 @@ class DirectoryTree_UI(Canvas):
                     f.write(data)
                 messagebox.showinfo(message = "Copy successfully!")
             except:
-                messagebox.showerror(message = "Cannot copy!")    
+                messagebox.showerror(message = "Cannot copy!")  
         else:
             messagebox.showerror(message = "Cannot copy!") 
 

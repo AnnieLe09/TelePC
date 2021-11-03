@@ -55,18 +55,21 @@ def delFile(sock):
         return
 
 # copy file from client to server
-def copyFile(sock):
+def copyFileToServer(sock):
     received = sock.recv(BUFSIZ).decode()
     filename, path = received.split(SEPARATOR)
     filename = os.path.basename(filename)
     sock.sendall("received filename".encode())
     data = recvall(sock)
-    with open(path + filename, "wb") as f:
-        f.write(data)
-    sock.sendall("received content".encode())
+    try:
+        with open(path + filename, "wb") as f:
+            f.write(data)
+        sock.sendall("received content".encode())
+    except:
+        sock.sendall("error".encode())
 
 # copy file from server to client
-def copyFileTo(sock):
+def copyFileToClient(sock):
     sock.sendall("OK".encode())
     filename = sock.recv(BUFSIZ).decode()
     with open(filename, "rb") as f:
@@ -93,13 +96,13 @@ def directory(client):
         # copy file from client to server
         elif (mod == "COPYTO"):
             client.sendall("OK".encode())
-            copyFile(client)
+            copyFileToServer(client)
             isMod = False
 
         # copy file from server to client
         elif (mod == "COPY"):
             client.sendall("OK".encode())
-            copyFileTo(client)
+            copyFileToClient(client)
             isMod = False
 
         elif (mod == "DEL"):
