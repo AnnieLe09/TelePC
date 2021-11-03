@@ -6,6 +6,8 @@ import shutdown_logout_client as sl
 import mac_address_client as mac
 import keylogger_client as kl
 import app_process_client as ap
+import directory_tree_client as dt
+from tkinter import messagebox
 
 #global variables
 BUFSIZ = 1024 * 4
@@ -35,7 +37,16 @@ def mac_address():
     mac.mac_address(client)
     return
 
+def back_dirTree(ui):
+    ui.place_forget()
+    ui.tree.pack_forget()
+    f2.place(x = 0, y = 0)
+    client.sendall(bytes("QUIT", "utf8"))
+
 def directory_tree():
+    client.sendall(bytes("DIRECTORY", "utf8"))
+    tmp = dt.DirectoryTree_UI(root, client)
+    tmp.button_6.configure(command = lambda: back_dirTree(tmp))
     return
 
 def app_process():
