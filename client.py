@@ -8,6 +8,7 @@ import keylogger_client as kl
 import app_process_client as ap
 import directory_tree_client as dt
 import live_screen_client as lsc
+import registry_client as rc
 from tkinter import messagebox
 
 #global variables
@@ -72,6 +73,17 @@ def keylogger():
     tmp.button_6.configure(command = lambda: back(tmp))
     return
 
+def registry():
+    client.sendall(bytes("REGISTRY", "utf8"))
+    tmp = rc.Registry_UI(root, client)
+    tmp.btn_back.configure(command=lambda: back_reg(tmp))
+    return
+
+def back_reg(ui):
+    ui.client.sendall(bytes("STOP_EDIT_REGISTRY", "utf8"))
+    ui.place_forget()
+    f2.place(x = 0, y = 0)
+
 def show_main_ui():
     f1.place_forget()
     global f2
@@ -83,6 +95,7 @@ def show_main_ui():
     f2.button_5.configure(command = app_process)
     f2.button_6.configure(command = disconnect)
     f2.button_7.configure(command = keylogger)
+    f2.button_8.configure(command = registry)
     return
 
 def connect():
