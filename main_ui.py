@@ -47,8 +47,10 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_1.place(
+            #x=727.0,
+            #y=72.0,
             x=727.0,
-            y=72.0,
+            y=20.0,
             width=120.0,
             height=120.0
         )
@@ -63,8 +65,10 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_2.place(
+            #x=552.0,
+            #y=251.0,
             x=552.0,
-            y=251.0,
+            y=173.0,
             width=120.0,
             height=120.0
         )
@@ -80,8 +84,10 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_3.place(
+            #x=727.0,
+            #y=251.0,
             x=727.0,
-            y=251.0,
+            y=173.0,
             width=120.0,
             height=120.0
         )
@@ -96,8 +102,10 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_4.place(
+            #x=552.0,
+            #y=430.0,
             x=552.0,
-            y=430.0,
+            y=327.0,
             width=120.0,
             height=120.0
         )
@@ -112,8 +120,10 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_5.place(
+            #x=727.0,
+            #y=430.0,
             x=727.0,
-            y=430.0,
+            y=327.0,
             width=120.0,
             height=120.0
         )
@@ -144,8 +154,26 @@ class Main_UI(Canvas):
             relief="flat"
         )
         self.button_7.place(
+            #x=552.0,
+            #y=72.0,
             x=552.0,
-            y=72.0,
+            y=20.0,
+            width=120.0,
+            height=120.0
+        )
+        
+        self.button_image_8 = PhotoImage(
+            file=relative_to_assets("button_8.png"))
+        self.button_8 = Button(self,
+            image=self.button_image_8,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_7 clicked"),
+            relief="flat"
+        )
+        self.button_8.place(
+            x=639.0,
+            y=466.0,
             width=120.0,
             height=120.0
         )
