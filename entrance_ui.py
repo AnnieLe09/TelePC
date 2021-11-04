@@ -13,7 +13,6 @@ class Entrance_UI(Canvas):
     def __init__(self, parent): 
         Canvas.__init__(self, parent)
         self.configure(
-            #window,
             bg = "#FFFFFF",
             height = 600,
             width = 1000,
@@ -23,13 +22,6 @@ class Entrance_UI(Canvas):
         )
         
         self.place(x = 0, y = 0)
-        self.entry_image_1 = PhotoImage(
-            file=relative_to_assets("entry.png"))
-        self.entry_bg_1 = self.create_image(
-            712.0,
-            330.5,
-            image=self.entry_image_1
-        )
         self.input = tk.StringVar(self)
         self.entry_1 = Entry(self,
             textvariable = self.input,
