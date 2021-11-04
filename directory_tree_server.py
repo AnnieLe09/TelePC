@@ -103,7 +103,6 @@ def directory(client):
             mod = client.recv(BUFSIZ).decode()
 
         if (mod == "SHOW"):
-            client.sendall("OK".encode())
             showTree(client)
             while True:
                 check = sendListDirs(client)

@@ -201,28 +201,27 @@ class DirectoryTree_UI(Canvas):
     def showTree(self):
         self.deleteTree()
         self.client.sendall("SHOW".encode())
-        isOk = self.client.recv(BUFFER_SIZE).decode()
-        if (isOk == "OK"):
-            file_name = "dirs.pkl"
+        
+        file_name = "dirs.pkl"
 
-            file_size = int(self.client.recv(BUFFER_SIZE))
-            self.client.sendall("received filesize".encode())
-            data = b""
-            while len(data) < file_size:
-                packet = self.client.recv(999999)
-                data += packet
-            with open(file_name, "wb") as f:
-                f.write(data)
-            open_file = open(file_name, "rb")
-            loaded_list = pickle.load(open_file)
-            open_file.close()
-            
-            for path in loaded_list:
-                try:
-                    abspath = os.path.abspath(path)
-                    self.insert_node('', abspath, abspath)
-                except:
-                    continue
+        file_size = int(self.client.recv(BUFFER_SIZE))
+        self.client.sendall("received filesize".encode())
+        data = b""
+        while len(data) < file_size:
+            packet = self.client.recv(999999)
+            data += packet
+        with open(file_name, "wb") as f:
+            f.write(data)
+        open_file = open(file_name, "rb")
+        loaded_list = pickle.load(open_file)
+        open_file.close()
+        
+        for path in loaded_list:
+            try:
+                abspath = os.path.abspath(path)
+                self.insert_node('', abspath, abspath)
+            except:
+                continue
 
     # copy file from client to server
     def copyFileToServer(self):
