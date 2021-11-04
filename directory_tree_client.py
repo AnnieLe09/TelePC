@@ -44,7 +44,7 @@ class DirectoryTree_UI(Canvas):
     def __init__(self, parent, client):
         Canvas.__init__(self, parent)
         self.client = client
-        self.currPath = ""
+        self.currPath = " "
         self.nodes = dict()
 
         self.configure(
@@ -219,6 +219,10 @@ class DirectoryTree_UI(Canvas):
         if (isOk == "OK"):
             filename = filedialog.askopenfilename(title="Select File", 
                                                 filetypes=[("All Files", "*.*")])
+            if filename == None or filename == "":
+                self.client.sendall("-1".encode())
+                temp = self.client.recv(BUFFER_SIZE)
+                return 
             destPath = self.currPath + "\\"
             filesize = os.path.getsize(filename)
             self.client.send(f"{filename}{SEPARATOR}{filesize}{SEPARATOR}{destPath}".encode())
@@ -243,8 +247,17 @@ class DirectoryTree_UI(Canvas):
         isOk = self.client.recv(BUFFER_SIZE).decode()
         if (isOk == "OK"):
             try:
-                self.client.sendall(self.currPath.encode())
                 destPath = filedialog.askdirectory()
+                if destPath == None or destPath == "":
+                    self.client.sendall("-1".encode())
+                    temp = self.client.recv(BUFFER_SIZE)
+                    return 
+                if not os.path.isfile(self.currPath):
+                    self.client.sendall("-1".encode())
+                    temp = self.client.recv(BUFFER_SIZE)
+                    messagebox.showerror(message = "Cannot copy!")  
+                    return 
+                self.client.sendall(self.currPath.encode())
                 filename = os.path.basename(self.currPath)
                 filesize = int(self.client.recv(100))
                 self.client.sendall("received filesize".encode())

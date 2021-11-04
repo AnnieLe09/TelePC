@@ -44,6 +44,9 @@ def delFile(sock):
 # copy file from client to server
 def copyFileToServer(sock):
     received = sock.recv(BUFSIZ).decode()
+    if (received == "-1"):
+        sock.sendall("-1".encode())
+        return
     filename, filesize, path = received.split(SEPARATOR)
     filename = os.path.basename(filename)
     filesize = int(filesize)
@@ -65,6 +68,9 @@ def copyFileToServer(sock):
 # copy file from server to client
 def copyFileToClient(sock):
     filename = sock.recv(BUFSIZ).decode()
+    if filename == "-1" or not os.path.isfile(filename):
+        sock.sendall("-1".encode())
+        return
     filesize = os.path.getsize(filename)
     sock.sendall(str(filesize).encode())
     temp = sock.recv(BUFSIZ)
