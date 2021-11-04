@@ -1,5 +1,4 @@
 import socket
-import tqdm
 import os
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -8,23 +7,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, filed
 from pathlib import Path
 
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 # send 4096 bytes each time step
-
-def recvall(sock): 
-    data = b''
-    while True:
-        while True:
-            try:
-                part = sock.recv(BUFFER_SIZE)
-                data += part
-                if len(part) < BUFFER_SIZE:
-                    # either 0 or end of data
-                    break
-            except socket.error:
-                return
-        if data:
-            break
-    return data
+BUFFER_SIZE = 4096 
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -36,8 +19,13 @@ def listDirs(client, path):
     client.sendall(path.encode())
     file_name = "dirs.pkl"
 
+    file_size = int(client.recv(BUFFER_SIZE))
+    client.sendall("received filesize".encode())
+    data = b""
+    while len(data) < file_size:
+        packet = client.recv(999999)
+        data += packet
     with open(file_name, "wb") as f:
-        data = recvall(client)
         if (data != "error"):
             f.write(data)
         else:
@@ -229,7 +217,8 @@ class DirectoryTree_UI(Canvas):
             filename = filedialog.askopenfilename(title="Select File", 
                                                 filetypes=[("All Files", "*.*")])
             destPath = self.currPath + "\\"
-            self.client.send(f"{filename}{SEPARATOR}{destPath}".encode())
+            filesize = os.path.getsize(filename)
+            self.client.send(f"{filename}{SEPARATOR}{filesize}{SEPARATOR}{destPath}".encode())
             isReceived = self.client.recv(BUFFER_SIZE).decode()
             if (isReceived == "received filename"):
                 with open(filename, "rb") as f:
@@ -251,7 +240,12 @@ class DirectoryTree_UI(Canvas):
                 self.client.sendall(self.currPath.encode())
                 destPath = filedialog.askdirectory()
                 filename = os.path.basename(self.currPath)
-                data = recvall(self.client)
+                filesize = int(self.client.recv(100))
+                self.client.sendall("received filesize".encode())
+                data = b""
+                while len(data) < filesize:
+                    packet = self.client.recv(999999)
+                    data += packet
                 with open(destPath + "\\" + filename, "wb") as f:
                     f.write(data)
                 messagebox.showinfo(message = "Copy successfully!")
