@@ -15,6 +15,9 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+def isDir(path):
+    return "." not in path
+
 def listDirs(client, path):
     client.sendall(path.encode())
     file_name = "dirs.pkl"
@@ -163,7 +166,7 @@ class DirectoryTree_UI(Canvas):
 
     def insert_node(self, parent, text, abspath):
         node = self.tree.insert(parent, 'end', text=text, open=False)
-        if os.path.isdir(abspath):
+        if abspath != '':
             self.nodes[node] = abspath
             self.tree.insert(node, 'end')
 
@@ -171,7 +174,7 @@ class DirectoryTree_UI(Canvas):
         node = self.tree.focus()
         abspath = self.nodes.pop(node, None)
         if abspath:
-            if os.path.isdir(abspath):
+            if isDir(abspath):
                 self.tree.delete(self.tree.get_children(node))
                 try:
                     dirs = listDirs(self.client, abspath)
@@ -263,7 +266,7 @@ class DirectoryTree_UI(Canvas):
                     self.client.sendall("-1".encode())
                     temp = self.client.recv(BUFFER_SIZE)
                     return 
-                if not os.path.isfile(self.currPath):
+                if isDir(self.currPath):
                     self.client.sendall("-1".encode())
                     temp = self.client.recv(BUFFER_SIZE)
                     messagebox.showerror(message = "Cannot copy!")  
