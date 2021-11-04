@@ -78,7 +78,7 @@ def send_start(client):
     client.sendall(bytes(str(pname.get()), "utf8"))
     res = client.recv(BUFSIZ).decode("utf8")
     if "1" in res:
-        tk.messagebox.showinfo(message = s + " đã được bật")
+        tk.messagebox.showinfo(message = "Đã được bật")
     else:
         tk.messagebox.showerror(message = "Lỗi!")
     return
