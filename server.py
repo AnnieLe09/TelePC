@@ -6,6 +6,7 @@ import directory_tree_server as dt
 import live_screen_server as lss
 import mac_address_server as mac
 import shutdown_logout_server as sl
+import registry_server as rs
 
 main = tk.Tk()
 main.geometry("200x200")
@@ -47,6 +48,11 @@ def directory_tree():
     dt.directory(client)
     return
 
+def registry():
+    global client
+    rs.registry(client)
+    return
+
 #Connect
 ###############################################################################           
 def Connect():
@@ -72,6 +78,8 @@ def Connect():
             mac_address()
         elif "DIRECTORY" in msg:
             directory_tree()
+        elif "REGISTRY" in msg:
+            registry()
         elif "QUIT" in msg:
             client.close()
             s.close()

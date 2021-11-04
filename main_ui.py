@@ -177,3 +177,6 @@ class Main_UI(Canvas):
             width=120.0,
             height=120.0
         )
+        self.button_8 = Button(self, text='Registry',command=lambda: print("button_8 clicked"), relief="flat")
+        self.button_8.place(x=680,y=550,width=50,height=30)
+

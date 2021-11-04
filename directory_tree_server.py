@@ -2,23 +2,10 @@ import tkinter as tk
 import socket, pickle
 import os
 
+from directory_tree_client import BUFFER_SIZE
+
 BUFSIZ = 1024 * 4
 SEPARATOR = "<SEPARATOR>"
-
-def recvall(sock): 
-    data = b''
-    while True:
-        while True:
-            try:
-                part = sock.recv(BUFSIZ)
-                data += part
-                if len(part) < BUFSIZ:
-                    break
-            except socket.error:
-                return
-        if data:
-            break
-    return data
 
 def sendListDirs(sock):
     path = sock.recv(BUFSIZ).decode()
@@ -30,12 +17,12 @@ def sendListDirs(sock):
         open_file = open(file_name, "wb")
         pickle.dump(os.listdir(path), open_file)
         open_file.close()
+        file_size = os.path.getsize(file_name)
+        sock.sendall(str(file_size).encode())
+        temp = sock.recv(BUFSIZ)
         with open(file_name, "rb") as f:
-            while True:
-                bytes_read = f.read(BUFSIZ)
-                if not bytes_read:
-                    break
-                sock.sendall(bytes_read)
+            data = f.read()
+            sock.sendall(data)
         return [True, path]
     except:
         sock.sendall("error".encode())
@@ -57,10 +44,14 @@ def delFile(sock):
 # copy file from client to server
 def copyFileToServer(sock):
     received = sock.recv(BUFSIZ).decode()
-    filename, path = received.split(SEPARATOR)
+    filename, filesize, path = received.split(SEPARATOR)
     filename = os.path.basename(filename)
+    filesize = int(filesize)
     sock.sendall("received filename".encode())
-    data = recvall(sock)
+    data = b""
+    while len(data) < filesize:
+        packet = sock.recv(999999)
+        data += packet
     try:
         with open(path + filename, "wb") as f:
             f.write(data)
@@ -70,8 +61,10 @@ def copyFileToServer(sock):
 
 # copy file from server to client
 def copyFileToClient(sock):
-    sock.sendall("OK".encode())
     filename = sock.recv(BUFSIZ).decode()
+    filesize = os.path.getsize(filename)
+    sock.sendall(str(filesize).encode())
+    temp = sock.recv(BUFSIZ)
     with open(filename, "rb") as f:
         data = f.read()
         sock.sendall(data)
