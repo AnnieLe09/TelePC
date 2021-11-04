@@ -52,12 +52,15 @@ def copyFileToServer(sock):
     while len(data) < filesize:
         packet = sock.recv(999999)
         data += packet
+    if (data == "-1"):
+        sock.sendall("-1".encode())
+        return
     try:
         with open(path + filename, "wb") as f:
             f.write(data)
         sock.sendall("received content".encode())
     except:
-        sock.sendall("error".encode())
+        sock.sendall("-1".encode())
 
 # copy file from server to client
 def copyFileToClient(sock):
@@ -103,5 +106,8 @@ def directory(client):
             delFile(client)
             isMod = False
 
-        else:
+        elif (mod == "QUIT"):
             return
+        
+        else:
+            client.sendall("-1".encode())

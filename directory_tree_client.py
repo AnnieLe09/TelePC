@@ -20,6 +20,9 @@ def listDirs(client, path):
     file_name = "dirs.pkl"
 
     file_size = int(client.recv(BUFFER_SIZE))
+    if (file_size == -1):
+        messagebox.showerror(message = "Click SHOW button again to watch the new directory tree!")
+        return []
     client.sendall("received filesize".encode())
     data = b""
     while len(data) < file_size:
@@ -221,9 +224,12 @@ class DirectoryTree_UI(Canvas):
             self.client.send(f"{filename}{SEPARATOR}{filesize}{SEPARATOR}{destPath}".encode())
             isReceived = self.client.recv(BUFFER_SIZE).decode()
             if (isReceived == "received filename"):
-                with open(filename, "rb") as f:
-                    data = f.read()
-                    self.client.sendall(data)
+                try:
+                    with open(filename, "rb") as f:
+                        data = f.read()
+                        self.client.sendall(data)
+                except:
+                    self.client.sendall("-1".encode())
                 isReceivedContent = self.client.recv(BUFFER_SIZE).decode()
                 if (isReceivedContent == "received content"):
                     messagebox.showinfo(message = "Copy successfully!")
