@@ -151,12 +151,12 @@ class Registry_UI(Canvas):
         self.res2 = self.client.recv(BUFSIZ).decode('utf8')
         if self.action_ID == 1:
             if '0' in self.res1:
-                 tk.messagebox.showinfo(title='Thông báo', message='Thao tác không hợp lệ')
+                 tk.messagebox.showerror(title='Thông báo', message='Thao tác không hợp lệ')
             else:
                  tk.messagebox.showinfo(title='Thông báo', message=self.res2)
         else:
             if '0' in self.res1:
-                 tk.messagebox.showinfo(title='Thông báo', message='Thao tác không hợp lệ')
+                 tk.messagebox.showerror(title='Thông báo', message='Thao tác không hợp lệ')
             else:
                  tk.messagebox.showinfo(title='Thông báo', message='Thành công')
 
