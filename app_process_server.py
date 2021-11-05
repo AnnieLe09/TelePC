@@ -109,6 +109,7 @@ def app_process(client):
         #2-xoa
         elif action == 2:
             res = 1
+        #3 - start
         elif action == 3:
             pname = client.recv(BUFSIZ).decode("utf8")
             try:
@@ -116,7 +117,7 @@ def app_process(client):
                 res = 1
             except:
                 res = 0
-        if action != 1:
+        if action != 1 and action != 3:
             client.sendall(bytes(str(res), "utf8"))
         if action == 1:
             ls1 = pickle.dumps(ls1)

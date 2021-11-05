@@ -46,16 +46,53 @@ def get_value(full_path):
     except:
         return ["0", "0"]
 
+def dec_value(c):
+    c = c.upper()
+    if ord('0') <= ord(c) and ord(c) <= ord('9'):
+        return ord(c) - ord('0')
+    if ord('A') <= ord(c) and ord(c) <= ord('F'):
+        return ord(c) - ord('A') + 10
+    return 0
 
-def set_value(full_path, value, value_type='REG_SZ'):
+def str_to_bin(s):
+    res = b""
+    for i in range(0, len(s), 2):
+        a = dec_value(s[i])
+        b = dec_value(s[i + 1])
+        res += (a * 16 + b).to_bytes(1, byteorder='big')
+    return res
+
+def str_to_dec(s):
+    s = s.upper()
+    res = 0
+    for i in range(0, len(s)):
+        v = dec_value(s[i])
+        res = res*16 + v
+    return res
+
+
+def set_value(full_path, value, value_type):
     value_list = parse_data(full_path)
     try:
         winreg.CreateKey(getattr(winreg, value_list[0]), value_list[1])
         opened_key = winreg.OpenKey(getattr(winreg, value_list[0]), value_list[1], 0, winreg.KEY_WRITE)
+        if 'REG_BINARY' in value_type:
+            if len(value) % 2 == 1:
+                value += '0'
+            value = str_to_bin(value)
+        if 'REG_DWORD' in value_type:
+            if len(value) > 8:
+                value = value[:8]
+            value = str_to_dec(value)
+        if 'REG_QWORD' in value_type:
+            if len(value) > 16:
+                value = value[:16]
+            value = str_to_dec(value)                 
+        
         winreg.SetValueEx(opened_key, value_list[2], 0, getattr(winreg, value_type), value)
         winreg.CloseKey(opened_key)
         return ["1", "1"]
-    except:
+    except WindowsError:
         return ["0", "0"]
 
 
@@ -117,6 +154,12 @@ def registry(client):
         value = msg['value']
         v_type = msg['v_type']
         res = ['0','0']
+
+        print(ID)
+        print(full_path)
+        print(name_value)
+        print(value)
+        print(v_type)
 
         #ID==0 run file.reg
         #path is detail of file .reg

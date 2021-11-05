@@ -83,11 +83,13 @@ def send_start(client):
     global pname
     client.sendall(bytes("3", "utf8"))
     client.sendall(bytes(str(pname.get()), "utf8"))
+    '''
     res = client.recv(BUFSIZ).decode("utf8")
     if "1" in res:
         tk.messagebox.showinfo(message = "Đã được bật")
     else:
         tk.messagebox.showerror(message = "Lỗi!")
+    '''
     return
         
 def start(root, client):
