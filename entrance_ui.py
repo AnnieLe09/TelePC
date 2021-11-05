@@ -3,11 +3,18 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import tkinter.font as font
 import tkinter as tk
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+import os
+import sys
+def abs_path(file_name):
+    file_name = 'assets\\' + file_name
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return os.path.join(base_path, file_name)
 
 class Entrance_UI(Canvas):
     def __init__(self, parent): 
@@ -39,7 +46,7 @@ class Entrance_UI(Canvas):
         )
         
         self.button_image_1 = PhotoImage(
-            file=relative_to_assets("button.png"))
+            file=abs_path("button.png"))
         self.button_1 = Button(self,
             image=self.button_image_1,
             borderwidth=0,
@@ -55,7 +62,7 @@ class Entrance_UI(Canvas):
         )
         
         self.image_image_1 = PhotoImage(
-            file=relative_to_assets("image.png"))
+            file=abs_path("image.png"))
         self.image_1 = self.create_image(
             494.0,
             300.0,
