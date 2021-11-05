@@ -13,33 +13,26 @@ def showTree(sock):
         path = chr(c) + ":\\"
         if os.path.isdir(path):
             listD.append(path)
-    file_name = "dirs.pkl"
-    open_file = open(file_name, "wb")
-    pickle.dump(listD, open_file)
-    open_file.close()
-    file_size = os.path.getsize(file_name)
-    sock.sendall(str(file_size).encode())
+    data = pickle.dumps(listD)
+    sock.sendall(str(len(data)).encode())
     temp = sock.recv(BUFSIZ)
-    with open(file_name, "rb") as f:
-        data = f.read()
-        sock.sendall(data)
+    sock.sendall(data)
 
 def sendListDirs(sock):
     path = sock.recv(BUFSIZ).decode()
     if not os.path.isdir(path):
         return [False, path]
 
-    file_name = "dirs.pkl"
     try:
-        open_file = open(file_name, "wb")
-        pickle.dump(os.listdir(path), open_file)
-        open_file.close()
-        file_size = os.path.getsize(file_name)
-        sock.sendall(str(file_size).encode())
+        listT = []
+        listD = os.listdir(path)
+        for d in listD:
+            listT.append((d, os.path.isdir(path + "\\" + d)))
+        
+        data = pickle.dumps(listT)
+        sock.sendall(str(len(data)).encode())
         temp = sock.recv(BUFSIZ)
-        with open(file_name, "rb") as f:
-            data = f.read()
-            sock.sendall(data)
+        sock.sendall(data)
         return [True, path]
     except:
         sock.sendall("error".encode())

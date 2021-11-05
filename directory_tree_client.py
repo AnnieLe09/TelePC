@@ -9,38 +9,36 @@ from pathlib import Path
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+import os
+import sys
+def abs_path(file_name):
+    file_name = 'assets\\' + file_name
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
-
-def isDir(path):
-    return "." not in path
+    return os.path.join(base_path, file_name)
 
 def listDirs(client, path):
     client.sendall(path.encode())
-    file_name = "dirs.pkl"
 
-    file_size = int(client.recv(BUFFER_SIZE))
-    if (file_size == -1):
+    data_size = int(client.recv(BUFFER_SIZE))
+    if (data_size == -1):
         messagebox.showerror(message = "Click SHOW button again to watch the new directory tree!")
         return []
     client.sendall("received filesize".encode())
     data = b""
-    while len(data) < file_size:
+    while len(data) < data_size:
         packet = client.recv(999999)
         data += packet
-    with open(file_name, "wb") as f:
-        if (data != "error"):
-            f.write(data)
-        else:
-            messagebox.showerror(message = "Cannot open this directory!")
-            return []
+    if (data == "error"):
+        messagebox.showerror(message = "Cannot open this directory!")
+        return []
     
-    open_file = open(file_name, "rb")
-    loaded_list = pickle.load(open_file)
-    open_file.close()
+    loaded_list = pickle.loads(data)
     return loaded_list
 
 class DirectoryTree_UI(Canvas):
@@ -61,7 +59,7 @@ class DirectoryTree_UI(Canvas):
         )
         self.place(x = 0, y = 0)
         self.image_image_1 = PhotoImage(
-            file=relative_to_assets("bg.png"))
+            file=abs_path("bg.png"))
         self.image_1 = self.create_image(
             519.0,
             327.0,
@@ -164,9 +162,9 @@ class DirectoryTree_UI(Canvas):
             height=53.0
         )
 
-    def insert_node(self, parent, text, abspath):
+    def insert_node(self, parent, text, abspath, isFolder):
         node = self.tree.insert(parent, 'end', text=text, open=False)
-        if abspath != '':
+        if abspath != "" and isFolder:
             self.nodes[node] = abspath
             self.tree.insert(node, 'end')
 
@@ -174,14 +172,13 @@ class DirectoryTree_UI(Canvas):
         node = self.tree.focus()
         abspath = self.nodes.pop(node, None)
         if abspath:
-            if isDir(abspath):
-                self.tree.delete(self.tree.get_children(node))
-                try:
-                    dirs = listDirs(self.client, abspath)
-                    for p in dirs:
-                        self.insert_node(node, p, os.path.join(abspath, p))
-                except:
-                    messagebox.showerror(message = "Cannot open this directory!")
+            self.tree.delete(self.tree.get_children(node))
+            try:
+                dirs = listDirs(self.client, abspath)
+                for p in dirs:
+                    self.insert_node(node, p[0], os.path.join(abspath, p[0]), p[1])
+            except:
+                messagebox.showerror(message = "Cannot open this directory!")
 
     def select_node(self, event):
         item = self.tree.selection()[0]
@@ -198,31 +195,29 @@ class DirectoryTree_UI(Canvas):
         self.path.config(state = "disable")
 
     def deleteTree(self):
+        self.currPath = " "
+        self.path.config(state = "normal")
+        self.path.delete("1.0", tk.END)
+        self.path.config(state = "disable")
         for i in self.tree.get_children():
             self.tree.delete(i)
 
     def showTree(self):
         self.deleteTree()
         self.client.sendall("SHOW".encode())
-        
-        file_name = "dirs.pkl"
 
-        file_size = int(self.client.recv(BUFFER_SIZE))
+        data_size = int(self.client.recv(BUFFER_SIZE))
         self.client.sendall("received filesize".encode())
         data = b""
-        while len(data) < file_size:
+        while len(data) < data_size:
             packet = self.client.recv(999999)
             data += packet
-        with open(file_name, "wb") as f:
-            f.write(data)
-        open_file = open(file_name, "rb")
-        loaded_list = pickle.load(open_file)
-        open_file.close()
+        loaded_list = pickle.loads(data)
         
         for path in loaded_list:
             try:
                 abspath = os.path.abspath(path)
-                self.insert_node('', abspath, abspath)
+                self.insert_node('', abspath, abspath, True)
             except:
                 continue
 
@@ -266,14 +261,12 @@ class DirectoryTree_UI(Canvas):
                     self.client.sendall("-1".encode())
                     temp = self.client.recv(BUFFER_SIZE)
                     return 
-                if isDir(self.currPath):
-                    self.client.sendall("-1".encode())
-                    temp = self.client.recv(BUFFER_SIZE)
-                    messagebox.showerror(message = "Cannot copy!")  
-                    return 
                 self.client.sendall(self.currPath.encode())
                 filename = os.path.basename(self.currPath)
                 filesize = int(self.client.recv(100))
+                if (filesize == -1):
+                    messagebox.showerror(message = "Cannot copy!")  
+                    return
                 self.client.sendall("received filesize".encode())
                 data = b""
                 while len(data) < filesize:
