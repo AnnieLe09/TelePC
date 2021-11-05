@@ -2,12 +2,18 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+import os
+import sys
+def abs_path(file_name):
+    file_name = 'assets\\' + file_name
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return os.path.join(base_path, file_name)
 
 class Main_UI(Canvas):
     def __init__(self, parent):
@@ -23,7 +29,7 @@ class Main_UI(Canvas):
         )
         self.place(x = 0, y = 0)
         self.image_image_1 = PhotoImage(
-            file=relative_to_assets("image_1.png"))
+            file=abs_path("image_1.png"))
         self.image_1 = self.create_image(
             500.0,
             300.0,
@@ -31,14 +37,14 @@ class Main_UI(Canvas):
         )
         
         self.image_image_2 = PhotoImage(
-            file=relative_to_assets("image_2.png"))
+            file=abs_path("image_2.png"))
         self.image_2 = self.create_image(
             466.0,
             323.0,
             image=self.image_image_2
         )
         self.button_image_1 = PhotoImage(
-            file=relative_to_assets("button_1.png"))
+            file=abs_path("button_1.png"))
         self.button_1 = Button(self,
             image=self.button_image_1,
             borderwidth=0,
@@ -56,7 +62,7 @@ class Main_UI(Canvas):
         )
         
         self.button_image_2 = PhotoImage(
-            file=relative_to_assets("button_2.png"))
+            file=abs_path("button_2.png"))
         self.button_2 = Button(self,
             image=self.button_image_2,
             borderwidth=0,
@@ -75,7 +81,7 @@ class Main_UI(Canvas):
 
 
         self.button_image_3 = PhotoImage(
-            file=relative_to_assets("button_3.png"))
+            file=abs_path("button_3.png"))
         self.button_3 = Button(self,
             image=self.button_image_3,
             borderwidth=0,
@@ -93,7 +99,7 @@ class Main_UI(Canvas):
         )
         
         self.button_image_4 = PhotoImage(
-            file=relative_to_assets("button_4.png"))
+            file=abs_path("button_4.png"))
         self.button_4 = Button(self,
             image=self.button_image_4,
             borderwidth=0,
@@ -111,7 +117,7 @@ class Main_UI(Canvas):
         )
 
         self.button_image_5 = PhotoImage(
-            file=relative_to_assets("button_5.png"))
+            file=abs_path("button_5.png"))
         self.button_5 = Button(self,
             image=self.button_image_5,
             borderwidth=0,
@@ -129,7 +135,7 @@ class Main_UI(Canvas):
         )
         
         self.button_image_6 = PhotoImage(
-            file=relative_to_assets("button_6.png"))
+            file=abs_path("button_6.png"))
         self.button_6 = Button(self,
             image=self.button_image_6,
             borderwidth=0,
@@ -145,7 +151,7 @@ class Main_UI(Canvas):
         )
         
         self.button_image_7 = PhotoImage(
-            file=relative_to_assets("button_7.png"))
+            file=abs_path("button_7.png"))
         self.button_7 = Button(self,
             image=self.button_image_7,
             borderwidth=0,
@@ -163,7 +169,7 @@ class Main_UI(Canvas):
         )
         
         self.button_image_8 = PhotoImage(
-            file=relative_to_assets("button_8.png"))
+            file=abs_path("button_8.png"))
         self.button_8 = Button(self,
             image=self.button_image_8,
             borderwidth=0,

@@ -5,11 +5,18 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 BUFSIZ = 1024 * 4
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+import os
+import sys
+def abs_path(file_name):
+    file_name = 'assets\\' + file_name
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return os.path.join(base_path, file_name)
 
 def recvall(sock, size):
     message = bytearray()
@@ -52,18 +59,19 @@ def send_kill(client):
 
 def _list(client, tab, s):
     client.sendall(bytes("1", "utf8"))
-    print("  ")
     client.sendall(bytes(s, "utf8"))
-    print("  ")
     ls1 = receive(client)
     ls1 = pickle.loads(ls1)
     ls2 = receive(client)
     ls2 = pickle.loads(ls2) 
     ls3 = receive(client)
     ls3 = pickle.loads(ls3)
+    print(ls1)
+    print(ls2)
+    print(ls3)
     for i in tab.get_children():
         tab.delete(i)
-    for i in range(1, len(ls1)):
+    for i in range(len(ls1)):
         tab.insert(parent = '', index = 'end', text = '', values = (ls1[i], ls2[i], ls3[i]))
     return
 
@@ -76,11 +84,6 @@ def send_start(client):
     global pname
     client.sendall(bytes("3", "utf8"))
     client.sendall(bytes(str(pname.get()), "utf8"))
-    res = client.recv(BUFSIZ).decode("utf8")
-    if "1" in res:
-        tk.messagebox.showinfo(message = "Đã được bật")
-    else:
-        tk.messagebox.showerror(message = "Lỗi!")
     return
         
 def start(root, client):
@@ -120,7 +123,7 @@ class App_Process_UI(Canvas):
 
         self.place(x = 0, y = 0)
         self.image_image_1 = PhotoImage(
-            file=relative_to_assets("bg.png"))
+            file=abs_path("bg.png"))
         self.image_1 = self.create_image(
             519.0,
             327.0,
