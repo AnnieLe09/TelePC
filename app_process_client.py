@@ -59,18 +59,19 @@ def send_kill(client):
 
 def _list(client, tab, s):
     client.sendall(bytes("1", "utf8"))
-    print("  ")
     client.sendall(bytes(s, "utf8"))
-    print("  ")
     ls1 = receive(client)
     ls1 = pickle.loads(ls1)
     ls2 = receive(client)
     ls2 = pickle.loads(ls2) 
     ls3 = receive(client)
     ls3 = pickle.loads(ls3)
+    print(ls1)
+    print(ls2)
+    print(ls3)
     for i in tab.get_children():
         tab.delete(i)
-    for i in range(1, len(ls1)):
+    for i in range(len(ls1)):
         tab.insert(parent = '', index = 'end', text = '', values = (ls1[i], ls2[i], ls3[i]))
     return
 
@@ -83,13 +84,6 @@ def send_start(client):
     global pname
     client.sendall(bytes("3", "utf8"))
     client.sendall(bytes(str(pname.get()), "utf8"))
-    '''
-    res = client.recv(BUFSIZ).decode("utf8")
-    if "1" in res:
-        tk.messagebox.showinfo(message = "Đã được bật")
-    else:
-        tk.messagebox.showerror(message = "Lỗi!")
-    '''
     return
         
 def start(root, client):
