@@ -92,7 +92,7 @@ def set_value(full_path, value, value_type):
         winreg.SetValueEx(opened_key, value_list[2], 0, getattr(winreg, value_type), value)
         winreg.CloseKey(opened_key)
         return ["1", "1"]
-    except WindowsError:
+    except:
         return ["0", "0"]
 
 
