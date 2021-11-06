@@ -1,5 +1,4 @@
 import tkinter as tk
-import socket
 
 def close_event(main, client):
     client.sendall(bytes("QUIT", "utf8"))

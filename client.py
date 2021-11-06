@@ -9,7 +9,6 @@ import app_process_client as ap
 import directory_tree_client as dt
 import live_screen_client as lsc
 import registry_client as rc
-from tkinter import messagebox
 
 #global variables
 BUFSIZ = 1024 * 4

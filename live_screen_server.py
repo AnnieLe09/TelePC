@@ -1,11 +1,9 @@
 # Socket
-from ctypes import sizeof
 import socket
 
 # Work with Image
 from PIL import ImageGrab
 import io
-from random import randint
 
 # Thread
 from threading import Thread

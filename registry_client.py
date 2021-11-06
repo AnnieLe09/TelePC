@@ -1,14 +1,8 @@
-# Socket
-import socket
-from os import getlogin
 import json
-
-# Thread
-from threading import Thread
 
 # Tkinter
 import tkinter as tk
-from tkinter import Canvas, OptionMenu, StringVar, ttk, filedialog, scrolledtext
+from tkinter import Canvas, filedialog
 from tkinter.filedialog import asksaveasfile
 
 

@@ -1,4 +1,4 @@
-import os, socket
+import os
 
 BUFSIZ = 1024 * 4
 def shutdown_logout(client):

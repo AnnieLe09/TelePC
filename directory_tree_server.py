@@ -1,5 +1,4 @@
-import tkinter as tk
-import socket, pickle
+import  pickle
 import os
 
 from directory_tree_client import BUFFER_SIZE

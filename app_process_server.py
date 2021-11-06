@@ -1,4 +1,4 @@
-import socket, pickle, PIL.ImageGrab, psutil, struct
+import  pickle, psutil, struct
 import os
 
 BUFSIZ = 1024 * 4

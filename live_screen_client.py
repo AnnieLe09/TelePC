@@ -1,6 +1,5 @@
 # Socket
 import socket
-from os import getlogin
 
 # Thread
 from threading import Thread
@@ -8,8 +7,6 @@ from threading import Thread
 # Image
 from PIL import Image, ImageTk
 import io
-from random import randint
-from numpy.core.numeric import full
 
 # Tkinter
 import tkinter as tk

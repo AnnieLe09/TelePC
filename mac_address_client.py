@@ -1,5 +1,4 @@
 import tkinter as tk
-import socket
 
 BUFSIZ = 1024 * 4
 

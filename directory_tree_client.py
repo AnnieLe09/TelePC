@@ -1,10 +1,8 @@
-import socket
 import os
 import tkinter as tk
 import tkinter.ttk as ttk
 import pickle
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, filedialog, messagebox
-from pathlib import Path
+from tkinter import Canvas,  Text, Button, PhotoImage,  filedialog, messagebox
 
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 

@@ -1,5 +1,4 @@
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import  Canvas, Entry, Button, PhotoImage
 import tkinter.font as font
 import tkinter as tk
 

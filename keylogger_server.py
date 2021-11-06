@@ -1,4 +1,4 @@
-import threading, socket, keyboard
+import threading, keyboard
 from pynput.keyboard import Listener 
 
 BUFSIZ = 1024 * 4

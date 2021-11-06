@@ -1,8 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog, scrolledtext, ttk
-import socket, pickle, struct
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import  ttk
+import pickle, struct
+from tkinter import Canvas, Button, PhotoImage
 
 BUFSIZ = 1024 * 4
 import os

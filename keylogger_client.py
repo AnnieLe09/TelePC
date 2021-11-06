@@ -1,7 +1,5 @@
 import tkinter as tk
-import socket
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from pathlib import Path
+from tkinter import Canvas, Text, Button, PhotoImage
 
 BUFSIZ = 1024 * 4
 
